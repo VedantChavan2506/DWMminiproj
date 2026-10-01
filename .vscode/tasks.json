@@ -1,0 +1,26 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"label": "hello",
+			"type": "shell",
+			"command": "echo hello",
+			"isBackground": false,
+			"problemMatcher": []
+		},
+		{
+			"label": "Install front-end dependencies",
+			"type": "shell",
+			"command": "cd \"c:\\College work\" && npm install",
+			"isBackground": false,
+			"problemMatcher": []
+		},
+		{
+			"label": "Install front-end dependencies",
+			"type": "shell",
+			"command": "cd \"c:\\College work\"; npm install; if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }",
+			"isBackground": false,
+			"problemMatcher": []
+		}
+	]
+}
