@@ -964,15 +964,166 @@ export const AdminDashboardPage: React.FC<AdminDashboardPageProps> = ({
         </div>
       )}
 
-      {/* ── SECTION: ETL PIPELINE (When clicked on ETL Pipeline tab) ── */}
-      {activeTab === 'etl-process' && (
-        <div className="bg-white dark:bg-[#111827] rounded-xl border border-slate-200 dark:border-slate-800 p-6 shadow-sm space-y-4">
+      {/* ── SECTION: ETL PIPELINE (Visible on Overview & ETL Pipeline tabs) ── */}
+      {(activeTab === 'tech-overview' || activeTab === 'etl-process') && (
+        <div className="bg-white dark:bg-[#111827] rounded-xl border border-slate-200 dark:border-slate-800 p-6 shadow-sm space-y-5">
           <div className="flex items-center gap-2">
             <RefreshCw className="w-5 h-5 text-blue-500" />
             <h3 className="text-base font-bold text-slate-900 dark:text-white">
               ETL Pipeline Details
             </h3>
           </div>
+
+          {/* Visual End-to-End ETL Flow Diagram */}
+          <div className="p-4 sm:p-5 rounded-xl bg-slate-50/80 dark:bg-slate-950/70 border border-slate-200/90 dark:border-slate-800/80">
+            <div className="flex items-center justify-between mb-3.5">
+              <span className="text-[10px] font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">
+                End-to-End Data Pipeline Architecture
+              </span>
+              <span className="text-[10px] font-mono font-semibold px-2 py-0.5 rounded bg-indigo-50 dark:bg-indigo-950/80 border border-indigo-200 dark:border-indigo-800/60 text-indigo-700 dark:text-indigo-300">
+                CSV → Extract → Transform → Load → Star Schema
+              </span>
+            </div>
+
+            <div className="flex flex-col lg:flex-row items-stretch lg:items-center gap-2 lg:gap-1.5">
+              {/* STAGE 1: SOURCE */}
+              <div className="flex-1 min-w-0 p-3 rounded-lg bg-white dark:bg-slate-900/90 border border-slate-200 dark:border-slate-800 shadow-xs flex flex-col justify-between">
+                <div className="flex items-center justify-between mb-1.5">
+                  <span className="text-[10px] font-black uppercase tracking-wider text-slate-500 dark:text-slate-400">
+                    1. SOURCE
+                  </span>
+                  <div className="w-5 h-5 rounded bg-slate-100 dark:bg-slate-800 flex items-center justify-center text-slate-600 dark:text-slate-400">
+                    <FileSpreadsheet className="w-3 h-3" />
+                  </div>
+                </div>
+                <div>
+                  <h5 className="text-xs font-bold text-slate-900 dark:text-white">CSV Dataset</h5>
+                  <p className="text-[11px] font-mono text-slate-600 dark:text-slate-400 mt-0.5">41,188 Records</p>
+                </div>
+                <div className="mt-2 pt-1.5 border-t border-slate-100 dark:border-slate-800/80 text-[10px] text-slate-400 font-mono truncate">
+                  bank-additional-full.csv
+                </div>
+              </div>
+
+              {/* Arrow 1 */}
+              <div className="hidden lg:flex items-center justify-center shrink-0 px-0.5 text-slate-400 dark:text-slate-600">
+                <ArrowRight className="w-3.5 h-3.5" />
+              </div>
+              <div className="flex lg:hidden justify-center items-center text-slate-400 dark:text-slate-600 py-0.5">
+                <svg className="w-3 h-3 rotate-90" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                </svg>
+              </div>
+
+              {/* STAGE 2: EXTRACT */}
+              <div className="flex-1 min-w-0 p-3 rounded-lg bg-white dark:bg-slate-900/90 border border-amber-200 dark:border-amber-500/30 shadow-xs flex flex-col justify-between">
+                <div className="flex items-center justify-between mb-1.5">
+                  <span className="text-[10px] font-black uppercase tracking-wider text-amber-600 dark:text-amber-400">
+                    2. EXTRACT
+                  </span>
+                  <div className="w-5 h-5 rounded bg-amber-50 dark:bg-amber-500/10 flex items-center justify-center text-amber-600 dark:text-amber-400 border border-amber-200 dark:border-amber-500/20">
+                    <RefreshCw className="w-3 h-3" />
+                  </div>
+                </div>
+                <div>
+                  <h5 className="text-xs font-bold text-slate-900 dark:text-white">Pandas DataFrame</h5>
+                  <p className="text-[11px] text-slate-600 dark:text-slate-400 mt-0.5">Schema Validation</p>
+                </div>
+                <div className="mt-2 pt-1.5 border-t border-slate-100 dark:border-slate-800/80 text-[10px] text-amber-600 dark:text-amber-400 font-mono truncate">
+                  read_csv(sep=';')
+                </div>
+              </div>
+
+              {/* Arrow 2 */}
+              <div className="hidden lg:flex items-center justify-center shrink-0 px-0.5 text-slate-400 dark:text-slate-600">
+                <ArrowRight className="w-3.5 h-3.5" />
+              </div>
+              <div className="flex lg:hidden justify-center items-center text-slate-400 dark:text-slate-600 py-0.5">
+                <svg className="w-3 h-3 rotate-90" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                </svg>
+              </div>
+
+              {/* STAGE 3: TRANSFORM */}
+              <div className="flex-1 min-w-0 p-3 rounded-lg bg-white dark:bg-slate-900/90 border border-blue-200 dark:border-blue-500/30 shadow-xs flex flex-col justify-between">
+                <div className="flex items-center justify-between mb-1.5">
+                  <span className="text-[10px] font-black uppercase tracking-wider text-blue-600 dark:text-blue-400">
+                    3. TRANSFORM
+                  </span>
+                  <div className="w-5 h-5 rounded bg-blue-50 dark:bg-blue-500/10 flex items-center justify-center text-blue-600 dark:text-blue-400 border border-blue-200 dark:border-blue-500/20">
+                    <Workflow className="w-3 h-3" />
+                  </div>
+                </div>
+                <div>
+                  <h5 className="text-xs font-bold text-slate-900 dark:text-white truncate">Clean &amp; Deduplicate</h5>
+                  <p className="text-[11px] text-slate-600 dark:text-slate-400 mt-0.5 truncate">Dimension Mapping</p>
+                </div>
+                <div className="mt-2 pt-1.5 border-t border-slate-100 dark:border-slate-800/80 text-[10px] text-blue-600 dark:text-blue-400 font-mono truncate">
+                  Surrogate Keys
+                </div>
+              </div>
+
+              {/* Arrow 3 */}
+              <div className="hidden lg:flex items-center justify-center shrink-0 px-0.5 text-slate-400 dark:text-slate-600">
+                <ArrowRight className="w-3.5 h-3.5" />
+              </div>
+              <div className="flex lg:hidden justify-center items-center text-slate-400 dark:text-slate-600 py-0.5">
+                <svg className="w-3 h-3 rotate-90" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                </svg>
+              </div>
+
+              {/* STAGE 4: LOAD */}
+              <div className="flex-1 min-w-0 p-3 rounded-lg bg-white dark:bg-slate-900/90 border border-emerald-200 dark:border-emerald-500/30 shadow-xs flex flex-col justify-between">
+                <div className="flex items-center justify-between mb-1.5">
+                  <span className="text-[10px] font-black uppercase tracking-wider text-emerald-600 dark:text-emerald-400">
+                    4. LOAD
+                  </span>
+                  <div className="w-5 h-5 rounded bg-emerald-50 dark:bg-emerald-500/10 flex items-center justify-center text-emerald-600 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-500/20">
+                    <Database className="w-3 h-3" />
+                  </div>
+                </div>
+                <div>
+                  <h5 className="text-xs font-bold text-slate-900 dark:text-white">SQLite Engine</h5>
+                  <p className="text-[11px] text-slate-600 dark:text-slate-400 mt-0.5 truncate">Fact + Dimensions</p>
+                </div>
+                <div className="mt-2 pt-1.5 border-t border-slate-100 dark:border-slate-800/80 text-[10px] text-emerald-600 dark:text-emerald-400 font-mono truncate">
+                  4 Dims + Fact
+                </div>
+              </div>
+
+              {/* Arrow 4 */}
+              <div className="hidden lg:flex items-center justify-center shrink-0 px-0.5 text-slate-400 dark:text-slate-600">
+                <ArrowRight className="w-3.5 h-3.5" />
+              </div>
+              <div className="flex lg:hidden justify-center items-center text-slate-400 dark:text-slate-600 py-0.5">
+                <svg className="w-3 h-3 rotate-90" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                </svg>
+              </div>
+
+              {/* STAGE 5: DATA WAREHOUSE */}
+              <div className="flex-1 min-w-0 p-3 rounded-lg bg-white dark:bg-slate-900/90 border border-indigo-200 dark:border-indigo-500/40 shadow-xs flex flex-col justify-between">
+                <div className="flex items-center justify-between mb-1.5">
+                  <span className="text-[10px] font-black uppercase tracking-wider text-indigo-600 dark:text-indigo-400">
+                    5. WAREHOUSE
+                  </span>
+                  <div className="w-5 h-5 rounded bg-indigo-50 dark:bg-indigo-500/10 flex items-center justify-center text-indigo-600 dark:text-indigo-400 border border-indigo-200 dark:border-indigo-500/20">
+                    <Server className="w-3 h-3" />
+                  </div>
+                </div>
+                <div>
+                  <h5 className="text-xs font-bold text-slate-900 dark:text-white truncate">bank_warehouse.db</h5>
+                  <p className="text-[11px] text-slate-600 dark:text-slate-400 mt-0.5">Star Schema</p>
+                </div>
+                <div className="mt-2 pt-1.5 border-t border-slate-100 dark:border-slate-800/80 text-[10px] text-indigo-600 dark:text-indigo-400 font-mono font-semibold truncate">
+                  fact_campaign (41,188)
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Existing 3 ETL Cards */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs">
             <div className="p-4 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-900/50">
               <h4 className="font-bold text-amber-600 mb-1">1. Extract</h4>
