@@ -1,7 +1,6 @@
 import React from 'react';
 import {
   Cpu,
-  Code2,
   FileSpreadsheet,
   Workflow,
   Scale,
@@ -13,7 +12,6 @@ import {
   Layers,
   Server,
   Network,
-  Map,
   ChevronLeft,
   ChevronRight,
   ShieldCheck,
@@ -44,12 +42,6 @@ const adminNavItems: AdminNavItem[] = [
     label: 'Technical Overview',
     icon: <Cpu className="w-4 h-4" />,
     badge: 'Main',
-  },
-  {
-    id: 'python-impl',
-    label: 'Python Implementation',
-    icon: <Code2 className="w-4 h-4" />,
-    badge: 'Core',
   },
   {
     id: 'dataset',
@@ -112,12 +104,6 @@ const adminNavItems: AdminNavItem[] = [
     id: 'architecture',
     label: 'System Architecture',
     icon: <Network className="w-4 h-4" />,
-  },
-  {
-    id: 'project-map',
-    label: 'Project Information',
-    icon: <Map className="w-4 h-4" />,
-    badge: 'Technical',
   },
 ];
 
