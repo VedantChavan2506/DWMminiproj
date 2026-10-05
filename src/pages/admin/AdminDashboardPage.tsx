@@ -592,8 +592,8 @@ export const AdminDashboardPage: React.FC<AdminDashboardPageProps> = ({
         </div>
       )}
 
-      {/* ── SECTION: DATA WAREHOUSE & STAR SCHEMA (Visible on Overview & Star Schema) ── */}
-      {(activeTab === 'tech-overview' || activeTab === 'star-schema' || activeTab === 'data-warehouse') && (
+      {/* ── SECTION: DATA WAREHOUSE & STAR SCHEMA (Visible on Star Schema & Data Warehouse pages) ── */}
+      {(activeTab === 'star-schema' || activeTab === 'data-warehouse') && (
         <div className="bg-white dark:bg-[#111827] rounded-xl border border-slate-200 dark:border-slate-800 p-6 shadow-sm space-y-6">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
             <div>
@@ -778,8 +778,8 @@ export const AdminDashboardPage: React.FC<AdminDashboardPageProps> = ({
         </div>
       )}
 
-      {/* ── SECTION: OLAP ANALYSIS (Visible on Overview & OLAP Operations) ── */}
-      {(activeTab === 'tech-overview' || activeTab === 'olap-ops') && (
+      {/* ── SECTION: OLAP ANALYSIS (Visible on OLAP Operations page) ── */}
+      {activeTab === 'olap-ops' && (
         <div className="bg-white dark:bg-[#111827] rounded-xl border border-slate-200 dark:border-slate-800 p-6 shadow-sm space-y-6">
           <div className="flex items-center gap-2">
             <Layers className="w-5 h-5 text-purple-500" />
