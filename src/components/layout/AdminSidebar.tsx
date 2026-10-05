@@ -5,13 +5,10 @@ import {
   Workflow,
   Scale,
   BarChart3,
-  BrainCircuit,
   RefreshCw,
   Database,
-  Boxes,
   Layers,
   Server,
-  Network,
   ChevronLeft,
   ChevronRight,
   ShieldCheck,
@@ -66,12 +63,6 @@ const adminNavItems: AdminNavItem[] = [
     badge: '4 Models',
   },
   {
-    id: 'machine-learning',
-    label: 'Machine Learning',
-    icon: <BrainCircuit className="w-4 h-4" />,
-    badge: 'XGBoost',
-  },
-  {
     id: 'etl-process',
     label: 'ETL Pipeline',
     icon: <RefreshCw className="w-4 h-4" />,
@@ -81,12 +72,6 @@ const adminNavItems: AdminNavItem[] = [
     label: 'Data Warehouse',
     icon: <Database className="w-4 h-4" />,
     badge: 'SQLite',
-  },
-  {
-    id: 'star-schema',
-    label: 'Star Schema',
-    icon: <Boxes className="w-4 h-4" />,
-    badge: 'DWM',
   },
   {
     id: 'olap-ops',
@@ -99,11 +84,6 @@ const adminNavItems: AdminNavItem[] = [
     label: 'Backend / API',
     icon: <Server className="w-4 h-4" />,
     badge: 'Flask',
-  },
-  {
-    id: 'architecture',
-    label: 'System Architecture',
-    icon: <Network className="w-4 h-4" />,
   },
 ];
 
