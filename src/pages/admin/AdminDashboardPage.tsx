@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import {
   Cpu,
   Code2,
@@ -100,14 +100,37 @@ export const AdminDashboardPage: React.FC<AdminDashboardPageProps> = ({
     },
   ];
 
-  // Model comparison chart data (After SMOTE)
-  const modelChartData = MODELS_AFTER_SMOTE.map((m) => ({
-    name: m.model,
-    Accuracy: +(m.accuracy * 100).toFixed(1),
-    Precision: +(m.precision * 100).toFixed(1),
-    Recall: +(m.recall * 100).toFixed(1),
-    'F1 Score': +(m.f1 * 100).toFixed(1),
-  }));
+  type MetricFilterType = 'all' | 'accuracy' | 'precision' | 'recall' | 'f1';
+
+  // Config mapping for each single metric option
+  const METRIC_CONFIG: Record<
+    Exclude<MetricFilterType, 'all'>,
+    { key: 'accuracy' | 'precision' | 'recall' | 'f1'; label: string; color: string }
+  > = {
+    accuracy: { key: 'accuracy', label: 'Accuracy', color: '#3b82f6' },
+    precision: { key: 'precision', label: 'Precision', color: '#10b981' },
+    recall: { key: 'recall', label: 'Recall', color: '#8b5cf6' },
+    f1: { key: 'f1', label: 'F1 Score', color: '#f59e0b' },
+  };
+
+  // Model comparison chart data dynamically computed based on selectedMetric
+  const modelChartData = useMemo(() => {
+    if (selectedMetric === 'all') {
+      return MODELS_AFTER_SMOTE.map((m) => ({
+        name: m.model,
+        Accuracy: +(m.accuracy * 100).toFixed(2),
+        Precision: +(m.precision * 100).toFixed(2),
+        Recall: +(m.recall * 100).toFixed(2),
+        'F1 Score': +(m.f1 * 100).toFixed(2),
+      }));
+    }
+
+    const config = METRIC_CONFIG[selectedMetric];
+    return MODELS_AFTER_SMOTE.map((m) => ({
+      name: m.model,
+      [config.label]: +(m[config.key] * 100).toFixed(2),
+    }));
+  }, [selectedMetric]);
 
   const chartTooltipStyle = {
     backgroundColor: isDark ? '#0f172a' : '#ffffff',
@@ -220,23 +243,33 @@ export const AdminDashboardPage: React.FC<AdminDashboardPageProps> = ({
                 </h3>
               </div>
               <p className="text-xs text-slate-500 mt-0.5">
-                Benchmark of evaluated algorithms under SMOTE-balanced training conditions.
+                {selectedMetric === 'all'
+                  ? 'Benchmark of evaluated algorithms under SMOTE-balanced training conditions.'
+                  : `Displaying ${METRIC_CONFIG[selectedMetric].label} comparison across evaluated algorithms.`}
               </p>
             </div>
 
             {/* Metric Switcher */}
             <div className="flex items-center gap-1.5 p-1 rounded-lg bg-slate-100 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 self-start sm:self-auto">
-              {(['all', 'accuracy', 'precision', 'recall', 'f1'] as const).map((m) => (
+              {(
+                [
+                  { id: 'all', label: 'All Metrics' },
+                  { id: 'accuracy', label: 'ACCURACY' },
+                  { id: 'precision', label: 'PRECISION' },
+                  { id: 'recall', label: 'RECALL' },
+                  { id: 'f1', label: 'F1' },
+                ] as const
+              ).map((btn) => (
                 <button
-                  key={m}
-                  onClick={() => setSelectedMetric(m)}
+                  key={btn.id}
+                  onClick={() => setSelectedMetric(btn.id)}
                   className={`px-2.5 py-1 rounded text-xs font-semibold transition-all ${
-                    selectedMetric === m
+                    selectedMetric === btn.id
                       ? 'bg-indigo-600 text-white shadow-xs'
                       : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
                   }`}
                 >
-                  {m === 'all' ? 'All Metrics' : m.toUpperCase()}
+                  {btn.label}
                 </button>
               ))}
             </div>
@@ -245,23 +278,39 @@ export const AdminDashboardPage: React.FC<AdminDashboardPageProps> = ({
           {/* Grouped Bar Chart */}
           <div className="h-[290px] w-full">
             <ResponsiveContainer width="100%" height="100%">
-              <BarChart data={modelChartData} margin={{ top: 10, right: 30, left: 10, bottom: 20 }}>
+              <BarChart
+                key={selectedMetric}
+                data={modelChartData}
+                margin={{ top: 10, right: 30, left: 10, bottom: 20 }}
+              >
                 <CartesianGrid strokeDasharray="3 3" stroke={isDark ? '#1e293b' : '#f1f5f9'} />
                 <XAxis dataKey="name" stroke={isDark ? '#94a3b8' : '#64748b'} fontSize={12} />
-                <YAxis unit="%" domain={[0, 100]} stroke={isDark ? '#94a3b8' : '#64748b'} fontSize={12} />
-                <Tooltip contentStyle={chartTooltipStyle} formatter={(val: any) => [`${val}%`]} />
+                <YAxis
+                  unit="%"
+                  domain={[0, 100]}
+                  stroke={isDark ? '#94a3b8' : '#64748b'}
+                  fontSize={12}
+                  tickFormatter={(val) => `${val}%`}
+                />
+                <Tooltip
+                  contentStyle={chartTooltipStyle}
+                  formatter={(val: any, name: any) => [`${val}%`, name]}
+                />
                 <Legend />
-                {(selectedMetric === 'all' || selectedMetric === 'accuracy') && (
-                  <Bar dataKey="Accuracy" fill="#3b82f6" radius={[4, 4, 0, 0]} />
-                )}
-                {(selectedMetric === 'all' || selectedMetric === 'precision') && (
-                  <Bar dataKey="Precision" fill="#10b981" radius={[4, 4, 0, 0]} />
-                )}
-                {(selectedMetric === 'all' || selectedMetric === 'recall') && (
-                  <Bar dataKey="Recall" fill="#8b5cf6" radius={[4, 4, 0, 0]} />
-                )}
-                {(selectedMetric === 'all' || selectedMetric === 'f1') && (
-                  <Bar dataKey="F1 Score" fill="#f59e0b" radius={[4, 4, 0, 0]} />
+                {selectedMetric === 'all' ? (
+                  <>
+                    <Bar dataKey="Accuracy" name="Accuracy" fill="#3b82f6" radius={[4, 4, 0, 0]} />
+                    <Bar dataKey="Precision" name="Precision" fill="#10b981" radius={[4, 4, 0, 0]} />
+                    <Bar dataKey="Recall" name="Recall" fill="#8b5cf6" radius={[4, 4, 0, 0]} />
+                    <Bar dataKey="F1 Score" name="F1 Score" fill="#f59e0b" radius={[4, 4, 0, 0]} />
+                  </>
+                ) : (
+                  <Bar
+                    dataKey={METRIC_CONFIG[selectedMetric].label}
+                    name={METRIC_CONFIG[selectedMetric].label}
+                    fill={METRIC_CONFIG[selectedMetric].color}
+                    radius={[4, 4, 0, 0]}
+                  />
                 )}
               </BarChart>
             </ResponsiveContainer>
