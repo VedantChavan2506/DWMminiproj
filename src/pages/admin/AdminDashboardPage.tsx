@@ -398,8 +398,8 @@ export const AdminDashboardPage: React.FC<AdminDashboardPageProps> = ({
         </div>
       )}
 
-      {/* ── SECTION: SMOTE CLASS BALANCING ANALYSIS (Visible on Overview & SMOTE Analysis) ── */}
-      {(activeTab === 'tech-overview' || activeTab === 'smote-analysis') && (
+      {/* ── SECTION: SMOTE CLASS BALANCING ANALYSIS (Visible on SMOTE Analysis page) ── */}
+      {activeTab === 'smote-analysis' && (
         <div className="bg-white dark:bg-[#111827] rounded-xl border border-slate-200 dark:border-slate-800 p-6 shadow-sm space-y-6">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
